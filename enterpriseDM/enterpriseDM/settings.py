@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import cx_Oracle
+cx_Oracle.init_oracle_client(lib_dir="/Users/aakashkolekar/Downloads/instantclient_19_8_2")
 
+# /Volumes/instantclient-basic-macos.x64-19.8.0.0.0dbru
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'edmSubApp'
 ]
 
 MIDDLEWARE = [
@@ -73,11 +77,22 @@ WSGI_APPLICATION = 'enterpriseDM.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+         'ENGINE': 'django.db.backends.oracle',
+         'NAME': 'MIS00',
+         'USER': 'mis531group08',
+         'PASSWORD': 'Ue/7eU1Wg',
+         'HOST': '128.196.27.219',
+         'PORT': '1521',
+  }
 }
 
 
