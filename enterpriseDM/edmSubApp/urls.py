@@ -6,6 +6,8 @@ urlpatterns = [
     path("",views.index, name = "index"),
     path("login", views.login, name = "login"),
     path("loginauth", views.loginauth, name="loginauth"),
+    path("logout", views.logout, name="logout"),
+    path("productlisting", views.productlisting, name = "productlisting"),
     path("addproducts", views.addproducts, name="addproducts"),
     path("addproductsproc", views.addproductsproc, name="addproductsproc"),
     path("visitdetails", views.visitdetails, name="visitdetails"),
@@ -19,5 +21,8 @@ urlpatterns = [
     path("employeeproductcheckins", views.employeeproductcheckins, name="employeeproductcheckins"),
     path("volunteersessions", views.volunteersessions, name="volunteersessions"),
     path("volunteersperlocation", views.volunteersperlocation, name="volunteersperlocation"),
+    path("productreceipts", views.productreceipts, name="productreceipts"),
+    path("employeeinfo", views.employeeinfo, name="employeeinfo"),
+    path("visitdetailsquery", views.visitdetailsquery, name="visitdetailsquery"),
 
 ]

@@ -9,34 +9,11 @@ def connect():
     dsn_tns = cx_Oracle.makedsn('128.196.27.219', '1521', service_name='ORCL') # if needed, place an 'r' before any parameter in order to address special characters such as '\'.
     conn = cx_Oracle.connect(user=r'mis531group08', password='Ue/7eU1Wg', dsn=dsn_tns)
     cursor = conn.cursor()
-    # cursor.execute('select * from donations')
-    # result = cursor.fetchall()
-    # for row in cursor:
-    #     print(row[0])
-    # print(result)
-    # cursor.callproc('getuserstats',
-    #                             ['2021'])
-    
-    # # cursor.execute('execute getuserstats("2021")')
-
-    # cursor.callproc('addproducts',
-    #                         ['Tada',5,'EMP8',50,'Purchase',40,5])
-
-    # conn.commit()
-
-    # out_val = cursor.var(int)
-    # cursor.callproc('addproducts', ['Strawberri',5,'EMP8','50','Purchase',40,12])
-    # print(out_val.getvalue())  
-
-
-    # print(cursor.fetchall())
-    # conn.close()
 
     return conn, cursor
 
-def index(request):
-    # connect()
 
+def index(request):
     return render(request, "edmSubApp/index.html")
 
 def login(request):
@@ -61,10 +38,22 @@ def loginauth(request):
         return render(request, "edmSubApp/contact.html")
 
     conn.close()
-    return render(request,"edmSubApp/index.html")
+
+    conn, cursor = connect()
+    cursor.execute("select * from products")
+    result = cursor.fetchall()
+    conn.close()
+
+    context = {"visitdetails" : result}
+    return render(request,"edmSubApp/productlisting.html", context)
+
+
+def logout(request):
+    return render(request,"edmSubApp/contact.html")
 
 def addproducts(request):
-    return render(request, "edmSubApp/addproducts.html")
+    del request.session['username']
+    return render(request, "edmSubApp/contact.html")
 
 
 def addproductsproc(request):
@@ -112,6 +101,7 @@ def monthlyproductspervisit(request):
             join locations l on l.locationid = v.locationid
         where l.locationname = 'Tucson'
             and v.visit_date between '01-MAY-21' and '31-MAY-21'
+            OR v.visit_date between'01-05-2021' and '31-05-2021'
         group by l.locationname
         union
         select l.locationname as "Location Name",
@@ -121,6 +111,7 @@ def monthlyproductspervisit(request):
             join locations l on l.locationid = v.locationid
         where l.locationname = 'Eller'
             and v.visit_date between '01-MAY-21' and '31-MAY-21'
+            OR v.visit_date between'01-05-2021' and '31-05-2021'
         group by l.locationname
         union
         select l.locationname as "Location Name", 
@@ -130,6 +121,7 @@ def monthlyproductspervisit(request):
             join locations l on l.locationid = v.locationid
         where l.locationname = 'Phoenix' 
             and v.visit_date between '01-MAY-21' and '31-MAY-21'
+            OR v.visit_date between'01-05-2021' and '31-05-2021'
         group by l.locationname
     """)
 
@@ -463,3 +455,117 @@ def volunteersperlocation(request):
     conn.close()
     context = {"visitdetails" : result}
     return render(request, "edmSubApp/volunteersperlocation.html", context)
+
+
+
+def productreceipts(request):
+    conn, cursor = connect()
+    cursor.execute("""
+        select pr.procurement_type as "Type of Procurement",
+            count(prd.productreceiptsid) as "Number of Product Types"
+        from product_receipts_details prd 
+            join product_receipts pr on pr.productreceiptsid = prd.productreceiptsid
+            join products p on p.productid = prd.productid
+        where pr.procurement_type = 'Donation'
+        group by pr.procurement_type
+        union
+        select pr.procurement_type as "Type of Procurement", 
+            count(prd.productreceiptsid) as "Number of Items"
+        from product_receipts_details prd 
+            join product_receipts pr on pr.productreceiptsid = prd.productreceiptsid
+            join products p on p.productid = prd.productid
+        where procurement_type = 'Purchase'
+        group by pr.procurement_type
+    """)
+
+    result = cursor.fetchall()
+    print(result)
+
+    conn.close()
+    context = {"visitdetails" : result}
+    return render(request, "edmSubApp/productreceipts.html", context)
+
+
+def employeeinfo(request):
+    conn, cursor = connect()
+    cursor.execute("""
+        with yr as (
+        SELECT distinct empid AS "Employee ID",
+        FIRST_NAME || ' ' || LAST_NAME "Employee Name" ,
+        round(months_between(sysdate, DOB)/12,0) as "Age"
+        FROM student_employees
+        ),
+        yr1 as (
+        SELECT distinct empid AS "Employee ID", emprole as "Role",
+        round(months_between(sysdate, Hire_Date)/12,0) as "Years Worked"
+        FROM employees
+        )
+        select yr."Employee ID", 
+        yr."Employee Name" , 
+        yr1."Role",
+        yr."Age", 
+        yr1."Years Worked" 
+        from yr join yr1 on yr."Employee ID"= yr1."Employee ID"
+
+    """)
+
+    result = cursor.fetchall()
+    print(result)
+
+    conn.close()
+    context = {"visitdetails" : result}
+    return render(request, "edmSubApp/employeeinfo.html", context)
+
+
+
+def visitdetailsquery(request):
+    conn, cursor = connect()
+    cursor.execute("""
+        with a1 as (
+            select count(visitid) as "Number of Visitors",
+                visit_date as "Visit Date",
+                case
+                when visit_date >= '01-JAN-2021' and visit_date <= '31-JAN-2021' then 'JANUARY'
+                    when visit_date >= '01-FEB-2021' and visit_date <= '28-FEB-2021' then 'FEBRUARY'
+                    when visit_date >= '01-MAR-2021' and visit_date <= '31-MAR-2021' then 'MARCH'
+                    when visit_date >= '01-APR-2021' and visit_date <= '30-APR-2021' then 'APRIL'
+                    when visit_date >= '01-MAY-2021' and visit_date <= '31-MAY-2021' then 'MAY'
+                    when visit_date >= '01-JUN-2021' and visit_date <= '30-JUN-2021' then 'JUNE'
+                    when visit_date >= '01-JUL-2021' and visit_date <= '31-JUL-2021' then 'JULY'
+                    when visit_date >= '01-AUG-2021' and visit_date <= '31-AUG-2021' then 'AUGUST'
+                    when visit_date >= '01-SEP-2021' and visit_date <= '30-SEP-2021' then 'SEPTEMBER'
+                    when visit_date >= '01-OCT-2021' and visit_date <= '31-OCT-2021' then 'OCTOBER'
+                    when visit_date >= '01-NOV-2021' and visit_date <= '30-NOV-2021' then 'NOVEMBER'
+                    when visit_date >= '01-DEC-2021' and visit_date <= '31-DEC-2021' then 'DECEMBER'
+                    end as "Month"
+            from visits
+            group by visit_date
+            )
+        select sum("Number of Visitors") as "Total Visitors",
+        coalesce("Month", 'Total Number of Visitors') as "Month" 
+        from a1
+        group by rollup ("Month")
+        order by "Total Visitors" desc
+    """)
+
+    result = cursor.fetchall()
+    print(result)
+
+    conn.close()
+    context = {"visitdetails" : result}
+    return render(request, "edmSubApp/visitdetailsquery.html", context)
+
+def productlisting(request):
+    conn, cursor = connect()
+    cursor.execute("""
+            select * from products
+    """)
+
+    result = cursor.fetchall()
+    print(result)
+
+    conn.close()
+    context = {"visitdetails" : result}
+    return render(request, "edmSubApp/productlisting.html", context)
+
+

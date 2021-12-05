@@ -32,7 +32,7 @@ https://templatemo.com/tm-561-purple-buzz
         <div class="container d-flex justify-content-between align-items-center">
             <a class="navbar-brand h1" href="index.html">
                 <i class='bx bx-buildings bx-sm text-dark'></i>
-                <span class="text-dark h4">Purple</span> <span class="text-primary h4">Buzz</span>
+                <span class="text-dark h4">UofA</span> <span class="text-primary h4">Pantry</span>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -40,7 +40,7 @@ https://templatemo.com/tm-561-purple-buzz
 
             <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="navbar-toggler-success">
                 <div class="flex-fill mx-xl-5 mb-2">
-                    <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
+                    <!-- <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
                         <li class="nav-item">
                             <a class="nav-link btn-outline-primary rounded-pill px-3" href="index.html">Home</a>
                         </li>
@@ -56,12 +56,12 @@ https://templatemo.com/tm-561-purple-buzz
                         <li class="nav-item">
                             <a class="nav-link btn-outline-primary rounded-pill px-3" href="contact.html">Contact</a>
                         </li>
-                    </ul>
+                    </ul> -->
                 </div>
                 <div class="navbar align-self-center d-flex">
                     <a class="nav-link" href="#"><i class='bx bx-bell bx-sm bx-tada-hover text-primary'></i></a>
                     <a class="nav-link" href="#"><i class='bx bx-cog bx-sm text-primary'></i></a>
-                    <a class="nav-link" href="#"><i class='bx bx-user-circle bx-sm text-primary'></i></a>
+                    <a class="nav-link" href="{% url 'login' %}"><i class='bx bx-user-circle bx-sm text-primary'></i></a>
                 </div>
             </div>
         </div>
@@ -149,37 +149,6 @@ https://templatemo.com/tm-561-purple-buzz
             <div class="col-lg-8 ">
                 <form class="contact-form row" method="post" action="{%url 'loginauth' %}" role="form">
                     {% csrf_token %}
-
-                    <!-- <div class="col-lg-6 mb-4">
-                        <div class="form-floating">
-                            <input type="text" class="form-control form-control-lg light-300" id="floatingname" name="inputname" placeholder="Name">
-                            <label for="floatingname light-300">Name</label>
-                        </div>
-                    </div> -->
-<!-- 
-                    <div class="col-lg-6 mb-4">
-                        <div class="form-floating">
-                            <input type="text" class="form-control form-control-lg light-300" id="floatingemail" name="inputemail" placeholder="Email">
-                            <label for="floatingemail light-300">Email</label>
-                        </div>
-                    </div> -->
-                    <!-- End Input Email -->
-<!-- 
-                    <div class="col-lg-6 mb-4">
-                        <div class="form-floating">
-                            <input type="text" class="form-control form-control-lg light-300" id="floatingphone" name="inputphone" placeholder="Phone">
-                            <label for="floatingphone light-300">Phone</label>
-                        </div>
-                    </div> -->
-                    <!-- End Input Phone -->
-<!-- 
-                    <div class="col-lg-6 mb-4">
-                        <div class="form-floating">
-                            <input type="text" class="form-control form-control-lg light-300" id="floatingcompany" name="inputcompany" placeholder="Company Name">
-                            <label for="floatingcompany light-300">Company Name</label>
-                        </div>
-                    </div> -->
-
                     <div class="col-12">
                         <div class="form-floating mb-4">
                             <input type="text" class="form-control form-control-lg light-300" id="floatingsubject" name="username" placeholder="Username">
@@ -194,18 +163,10 @@ https://templatemo.com/tm-561-purple-buzz
                             <label for="floatingsubject light-300">Password</label>
                         </div>
                     </div>
-<!-- 
-                    <div class="col-12">
-                        <div class="form-floating mb-3">
-                            <textarea class="form-control light-300" rows="8" placeholder="Message" id="floatingtextarea"></textarea>
-                            <label for="floatingtextarea light-300">Message</label>
-                        </div>
-                    </div> -->
-                    <!-- End Textarea Message -->
                     
 
                     <div class="col-md-12 col-12 m-auto text-end">
-                        <button type="submit" id= "submit" class="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300">Send Message</button>
+                        <button type="submit" id= "submit" class="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300">Submit</button>
                     </div>
 
                 </form>
@@ -219,6 +180,7 @@ https://templatemo.com/tm-561-purple-buzz
 
 
     <!-- Start Footer -->
+    <br>
     <footer class="bg-secondary pt-4">
         <div class="container">
             <div class="row py-4">
@@ -229,8 +191,7 @@ https://templatemo.com/tm-561-purple-buzz
                         <span class="text-light h5">Purple</span> <span class="text-light h5 semi-bold-600">Buzz</span>
                     </a>
                     <p class="text-light my-lg-4 my-2">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut.
+                        Welcome To Campus Pantry. Hungry? Come Visit Us
                     </p>
                     <ul class="list-inline footer-icons light-300">
                         <li class="list-inline-item m-0">
@@ -262,58 +223,55 @@ https://templatemo.com/tm-561-purple-buzz
                 </div>
 
                 <div class="col-lg-3 col-md-4 my-sm-0 mt-4">
-                    <h3 class="h4 pb-lg-3 text-light light-300">Our Company</h2>
+                    <h3 class="h4 pb-lg-3 text-light light-300">Exciting Queries</h2>
                         <ul class="list-unstyled text-light light-300">
                             <li class="pb-2">
-                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light" href="index.html">Home</a>
+                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light" href="#">Top Donors</a>
                             </li>
                             <li class="pb-2">
-                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="about.html">About Us</a>
+                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Funds By Type</a>
                             </li>
                             <li class="pb-2">
-                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="work.html">Work</a>
+                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Work History</a>
                             </li>
                             <li class="pb-2">
-                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i></i><a class="text-decoration-none text-light py-1" href="pricing.html">Price</a>
+                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i></i><a class="text-decoration-none text-light py-1" href="#">Grant Levels</a>
                             </li>
                             <li class="pb-2">
-                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="contact.html">Contact</a>
+                                <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Employee Product Checkins</a>
                             </li>
                         </ul>
                 </div>
 
                 <div class="col-lg-3 col-md-4 my-sm-0 mt-4">
-                    <h2 class="h4 pb-lg-3 text-light light-300">Our Works</h2>
+                    <h2 class="h4 pb-lg-3 text-light light-300">Exciting Queries</h2>
                     <ul class="list-unstyled text-light light-300">
                         <li class="pb-2">
-                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Branding</a>
+                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="{#">Volunteer Sessions</a>
                         </li>
                         <li class="pb-2">
-                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Business</a>
+                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Volunteers Per Location</a>
                         </li>
                         <li class="pb-2">
-                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Marketing</a>
+                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Product Receipts</a>
                         </li>
                         <li class="pb-2">
-                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Social Media</a>
+                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Employee Info</a>
                         </li>
                         <li class="pb-2">
-                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Digital Solution</a>
-                        </li>
-                        <li class="pb-2">
-                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Graphic</a>
+                            <i class='bx-fw bx bxs-chevron-right bx-xs'></i><a class="text-decoration-none text-light py-1" href="#">Visit Details Query</a>
                         </li>
                     </ul>
                 </div>
 
                 <div class="col-lg-3 col-md-4 my-sm-0 mt-4">
-                    <h2 class="h4 pb-lg-3 text-light light-300">For Client</h2>
+                    <h2 class="h4 pb-lg-3 text-light light-300">For Donors</h2>
                     <ul class="list-unstyled text-light light-300">
                         <li class="pb-2">
                             <i class='bx-fw bx bx-phone bx-xs'></i><a class="text-decoration-none text-light py-1" href="tel:010-020-0340">010-020-0340</a>
                         </li>
                         <li class="pb-2">
-                            <i class='bx-fw bx bx-mail-send bx-xs'></i><a class="text-decoration-none text-light py-1" href="mailto:info@company.com">info@arizona.edu</a>
+                            <i class='bx-fw bx bx-mail-send bx-xs'></i><a class="text-decoration-none text-light py-1" href="mailto:info@company.com">uofacampuspantry@gmail.com</a>
                         </li>
                     </ul>
                 </div>
@@ -331,7 +289,7 @@ https://templatemo.com/tm-561-purple-buzz
                     </div>
                     <div class="col-lg-6 col-sm-12">
                         <p class="text-lg-end text-center text-light light-300">
-                            Designed by <a rel="sponsored" class="text-decoration-none text-light" href="https://templatemo.com/" target="_blank"><strong>Aakash Anil Kolekar</strong></a>
+                            Designed by <a rel="sponsored" class="text-decoration-none text-light" href="https://www.linkedin.com/in/aakashkolekar/" target="_blank"><strong>Aakash Anil Kolekar</strong></a>
                         </p>
                     </div>
                 </div>
