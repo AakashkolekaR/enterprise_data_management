@@ -40,7 +40,7 @@ def loginauth(request):
     conn.close()
 
     conn, cursor = connect()
-    cursor.execute("select * from products")
+    cursor.execute("select * from products order by productid")
     result = cursor.fetchall()
     conn.close()
 
@@ -49,11 +49,11 @@ def loginauth(request):
 
 
 def logout(request):
+    del request.session['username']
     return render(request,"edmSubApp/contact.html")
 
 def addproducts(request):
-    del request.session['username']
-    return render(request, "edmSubApp/contact.html")
+    return render(request, "edmSubApp/addproducts.html")
 
 
 def addproductsproc(request):
@@ -64,17 +64,30 @@ def addproductsproc(request):
     priceperproduct = int((request.POST['priceperproduct']).strip())
     procurementtype = (request.POST['procurementtype']).strip()
     weight = int((request.POST['weight']).strip())
+    product_type = request.POST['type'].strip()
     quantity = int((request.POST['quantity']).strip())
 
     print(employee_id)
 
 
     cursor.callproc('addproducts',
-                            [productname,pointsperproduct,employee_id,priceperproduct,procurementtype,weight,quantity])
+                            [productname,pointsperproduct,employee_id,priceperproduct,procurementtype,weight,quantity,product_type])
 
     conn.commit()
     conn.close()
-    return render(request,"edmSubApp/index.html")
+
+
+    conn, cursor = connect()
+    cursor.execute("""
+            select * from products order by productid
+    """)
+
+    result = cursor.fetchall()
+    print(result)
+
+    conn.close()
+    context = {"visitdetails" : result}
+    return render(request,"edmSubApp/productlisting.html", context)
 
 
 def visitdetails(request):
@@ -169,57 +182,35 @@ def productstatistics(request):
 def vistorsperlocationpermonth(request):
     conn, cursor = connect()
     cursor.execute("""
-            WITH t1 AS (
-            SELECT visitID AS "VisitID", 
-            count(visitID) AS "Number of Visitors"
-            FROM users
-            JOIN visit_details visitD ON users.catcardno = visitd.catcardno
-            GROUP BY visitd.visitid
-            ), 
-            t2 AS (
-            SELECT loc.locationname, 
-            loc.locationID
-            FROM locations loc
-            ), 
-            t3 AS (
-            SELECT COUNT (visitID) AS "number of people", 
-            locationid AS "locationID"
-            FROM visits
-            GROUP BY locationid
-            )
+            with a1 as (
             SELECT 
-            t2.locationname,
-            t3.*,
-            CASE
-            when visits.visit_date LIKE '%%-JAN-%%' 
-                or visits.visit_date LIKE '%%-01-%%' THEN 'JANUARY'
-            when visits.visit_date LIKE '%%-FEB-%%' 
-                or visits.visit_date LIKE '%%-02-%%' THEN 'FEBRUARY'
-            when visits.visit_date LIKE '%%-MAR-%%' 
-                or visits.visit_date LIKE '%%-03-%%' THEN 'MARCH'
-            when visits.visit_date LIKE '%%-APR-%%' 
-                or visits.visit_date LIKE '%%-04-%%' THEN 'APRIL'
-            when visits.visit_date LIKE '%%-MAY-%%' 
-                or visits.visit_date LIKE '%%-05-%%' THEN 'MAY'
-            when visits.visit_date LIKE '%%-JUN-%%' 
-                or visits.visit_date LIKE '%%-06-%%' THEN 'JUNE'
-            when visits.visit_date LIKE '%%-JUL-%%' 
-                or visits.visit_date LIKE '%%-07-%%' THEN 'JULY'
-            when visits.visit_date LIKE '%%-AUG-%%' 
-                or visits.visit_date LIKE '%%-08-%%' THEN 'AUGUST'
-            when visits.visit_date LIKE '%%-SEP-%%' 
-                or visits.visit_date LIKE '%%-09-%%' THEN 'SEPTEMBER'
-            when visits.visit_date LIKE '%%-OCT-%%' 
-                or visits.visit_date LIKE '%%-10-%%' THEN 'OCTOBER'
-            when visits.visit_date LIKE '%%-NOV-%%' 
-                or visits.visit_date LIKE '%%-11-%%' THEN 'NOVEMBER'
-            when visits.visit_date LIKE '%%-DEC-%%' 
-                or visits.visit_date LIKE '%%-12-%%' THEN 'DECEMBER'
-            end AS "Month of Visit"
-            FROM t1 
-            JOIN visits ON visits.visitid = t1."VisitID"
-            JOIN t2 ON t2.locationID = visits.locationid
-            JOIN t3 ON t3."locationID" = visits.locationid
+                extract(month from v.visit_date) month,
+                loc.locationname AS "Location Name",
+                COUNT(visitID) AS "Number of Visitors"
+            FROM Visits V
+                JOIN locations loc ON  v.locationid = loc.locationid
+            GROUP BY loc.locationname, extract(month from v.visit_date)
+            ),
+            a2 as (
+            select
+            case
+            when month=1 then 'Janurary'
+            when month=2 then 'Feburary'
+            when month=3 then 'March'
+            when month=4 then 'April'
+            when month=5 then 'May'
+            when month=6 then 'June'
+            when month=7 then 'July'
+            when month=8 then 'August'
+            when month=9 then 'September'
+            when month=10 then 'October'
+            when month=11 then 'November'
+            when month=12 then 'December'
+            end as Month, "Location Name",
+            "Number of Visitors"
+            from a1)
+            select * from a2
+
     """)
 
     result = cursor.fetchall()
@@ -558,7 +549,7 @@ def visitdetailsquery(request):
 def productlisting(request):
     conn, cursor = connect()
     cursor.execute("""
-            select * from products
+            select * from products order by productid
     """)
 
     result = cursor.fetchall()
