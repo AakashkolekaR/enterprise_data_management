@@ -114,7 +114,6 @@ def monthlyproductspervisit(request):
             join locations l on l.locationid = v.locationid
         where l.locationname = 'Tucson'
             and v.visit_date between '01-MAY-21' and '31-MAY-21'
-            OR v.visit_date between'01-05-2021' and '31-05-2021'
         group by l.locationname
         union
         select l.locationname as "Location Name",
@@ -124,7 +123,6 @@ def monthlyproductspervisit(request):
             join locations l on l.locationid = v.locationid
         where l.locationname = 'Eller'
             and v.visit_date between '01-MAY-21' and '31-MAY-21'
-            OR v.visit_date between'01-05-2021' and '31-05-2021'
         group by l.locationname
         union
         select l.locationname as "Location Name", 
@@ -134,7 +132,6 @@ def monthlyproductspervisit(request):
             join locations l on l.locationid = v.locationid
         where l.locationname = 'Phoenix' 
             and v.visit_date between '01-MAY-21' and '31-MAY-21'
-            OR v.visit_date between'01-05-2021' and '31-05-2021'
         group by l.locationname
     """)
 
