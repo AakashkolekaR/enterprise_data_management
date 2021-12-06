@@ -268,7 +268,7 @@ def fundsbytype(request):
                     join fundraising f on f.fundraisingid = fd.fundraisingid
             group by f.fundraisingtype
         )
-        select "Fundraising Type", to_char(a1."Total", '$999') as "Total"
+        select "Fundraising Type", to_char(a1."Total", '$999,999') as "Total"
         from a1
         order by "Total" desc
     """)
